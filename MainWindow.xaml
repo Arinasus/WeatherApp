@@ -1,0 +1,208 @@
+﻿<Window x:Class="WeatherApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WeatherApp"
+        xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
+        Title="Погодное приложение" Height="600" Width="900"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <Storyboard x:Key="SlideInAnimation">
+            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.X"
+                             From="-300" To="0" Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Key="SlideOutStoryboard">
+            <DoubleAnimation Storyboard.TargetName="SlideTransform"
+                     Storyboard.TargetProperty="X"
+                     From="0" To="-300"
+                     Duration="0:0:0.3"/>
+        </Storyboard>
+        
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="#FF2B579A"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <FontFamily x:Key="Twemoji">
+            /Fonts/Twemoji.Mozilla.ttf#Twemoji Mozilla
+        </FontFamily>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Основной макет -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Панель меню и инструментов -->
+        <Grid Grid.Row="0" Background="#FF2B579A">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Menu Grid.Column="0" Background="#FF2B579A" Foreground="White"  VerticalAlignment="Center">
+                <MenuItem x:Name="FileMenu" Header="Файл">
+                    <MenuItem x:Name="UpdateButton" Header="Обновить данные" Click="RefreshData_Click" Foreground="Black"/>
+                    <Separator/>
+                    <MenuItem x:Name="ExitButton" Header="Выход" Click="Exit_Click" Foreground="Black"/>
+                </MenuItem>
+            </Menu>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="MapButton" Content="Карта" Margin="10,0"  Click="MapButton_Click"/>
+                <Button Content="Прогноз" Click="ShowForecast_Click" Margin="10,0"  
+                        ToolTip="Показать исторические данные и прогноз"/>
+                <Button x:Name="EventsButton" Content="Мероприятия" Margin="10,0" Click="Events_Click"/>
+                <Button x:Name="ReportsButton" Content="Отчеты" Margin="10,0"  Click="Button_Click"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock x:Name="UserInfoText" VerticalAlignment="Center" Margin="0,0,5,0" FontWeight="Bold" Foreground="White" Visibility="Collapsed"/>
+                <Button x:Name="AccountButton" 
+            Content="Войти" 
+            Click="AccountButton_Click" 
+            Margin="5,0"  
+            Width="100"/>
+
+                <ToolBar x:Name="ChooseMapType">
+                    <Button x:Name="ZoomIn" Content="+" ToolTip="Увеличить" Click="ZoomIn_Click"/>
+                    <Button x:Name="ZoomOut" Content="-" ToolTip="Уменьшить" Click="ZoomOut_Click"/>
+                    <Separator/>
+                    <ComboBox x:Name="MapStyleCombo" Width="120" SelectionChanged="MapStyleChanged">
+                        <ComboBoxItem Content="Стандартная" Tag="Navigation"/>
+                        <ComboBoxItem Content="Спутник" Tag="Imagery"/>
+                        <ComboBoxItem Content="Темная" Tag="DarkGray"/>
+                    </ComboBox>
+                </ToolBar>
+            </StackPanel>
+        </Grid>
+
+        <esri:MapView x:Name="MyMapView" 
+                 Grid.Row="1" 
+                 Background="LightGray"
+                 Visibility="Visible"/>
+        <Frame x:Name="MainFrame"
+            Grid.Row="1" 
+               NavigationUIVisibility="Hidden"
+               Visibility="Collapsed"
+           RenderTransformOrigin="0.5,0.5">
+            <Frame.RenderTransform>
+                <TranslateTransform X="0"/>
+            </Frame.RenderTransform>
+        </Frame>
+        <!-- Легенда качества воздуха -->
+        <Border Grid.Row="2" Background="#EEE" Padding="10" CornerRadius="5" Margin="5">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" x:Name="BorderScrollView">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="Rectangle">
+                            <Setter Property="Width" Value="30"/>
+                            <Setter Property="Height" Value="20"/>
+                            <Setter Property="Margin" Value="5,0"/>
+                            <Setter Property="RadiusX" Value="2"/>
+                            <Setter Property="RadiusY" Value="2"/>
+                        </Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="5,0"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <Rectangle Fill="Green" x:Name="GreenRectangle">
+                        <Rectangle.ToolTip>
+                            <StackPanel x:Name="RectangleDescription">
+                                <TextBlock Text="😊" FontFamily="Segoe UI Emoji" FontSize="20" HorizontalAlignment="Center" x:Name="Emoji"/>
+                                <TextBlock Text="0-50 (Хорошо)"/>
+                                <TextBlock Text="Качество воздуха считается удовлетворительным,"/>
+                                <TextBlock Text="загрязнение воздуха представляет небольшой риск или не представляет никакого риска."/>
+                            </StackPanel>
+                        </Rectangle.ToolTip>
+                    </Rectangle>
+                    <TextBlock Text="0-50 (Хорошо)" x:Name="TextGreenRectangle"/>
+                    <Rectangle Fill="Yellow" x:Name="YellowRectangle">
+                        <Rectangle.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="😐" FontFamily="Segoe UI Emoji"  FontSize="20" HorizontalAlignment="Center"/>
+                                <TextBlock Text="51-100 (Умеренно)"/>
+                                <TextBlock Text="Качество воздуха приемлемое; однако некоторые загрязнители"/>
+                                <TextBlock Text="могут представлять умеренную проблему для здоровья"/>
+                                <TextBlock Text="небольшой группы людей, особенно тех, кто"/>
+                                <TextBlock Text="чувствителен к загрязнению воздуха."/>
+                            </StackPanel>
+                        </Rectangle.ToolTip>
+                    </Rectangle>
+                    <TextBlock Text="51-100 (Умеренно)" x:Name="TextYellowRectangle"/>
+                    <Rectangle Fill="Orange" x:Name="OrangeRectangle">
+                        <Rectangle.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="😷" FontFamily="Segoe UI Emoji" FontSize="20" HorizontalAlignment="Center"/>
+                                <TextBlock Text="101-150 (Нездорово)"/>
+                                <TextBlock Text="Члены чувствительных групп могут испытывать"/>
+                                <TextBlock Text="последствия для здоровья. Большинство населения"/>
+                                <TextBlock Text="вряд ли пострадает."/>
+                            </StackPanel>
+                        </Rectangle.ToolTip>
+                    </Rectangle>
+                    <TextBlock Text="101-150 (Нездорово)" x:Name="TextOrangeRectangle"/>
+                    <Rectangle Fill="Red" x:Name="RedRectangle">
+                        <Rectangle.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="😨" FontFamily="Segoe UI Emoji" FontSize="20" HorizontalAlignment="Center"/>
+                                <TextBlock Text="151-200 (Очень нездорово)"/>
+                                <TextBlock Text="Каждый может начать испытывать последствия"/>
+                                <TextBlock Text="для здоровья; члены чувствительных групп"/>
+                                <TextBlock Text="могут испытывать более серьезные последствия."/>
+                            </StackPanel>
+                        </Rectangle.ToolTip>
+                    </Rectangle>
+                    <TextBlock Text="151-200 (Очень нездорово)" x:Name="TextRedRectangle"/>
+                    <Rectangle Fill="Purple" x:Name="PurpleRectangle">
+                        <Rectangle.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="🤢" FontFamily="Segoe UI Emoji" FontSize="20" HorizontalAlignment="Center"/>
+                                <TextBlock Text="201-300 (Опасно)"/>
+                                <TextBlock Text="Предупреждение о вреде для здоровья в условиях"/>
+                                <TextBlock Text="чрезвычайной ситуации. Более вероятно, что пострадает"/>
+                                <TextBlock Text="все население."/>
+                            </StackPanel>
+                        </Rectangle.ToolTip>
+                    </Rectangle>
+                    <TextBlock Text="201-300 (Опасно)" x:Name="TextPurpleRectangle"/>
+                    <Rectangle Fill="Maroon" x:Name="MaroonRectangle">
+                        <Rectangle.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="💀" FontFamily="Segoe UI Emoji" FontSize="20" HorizontalAlignment="Center"/>
+                                <TextBlock Text="300+ (Чрезвычайно опасно)"/>
+                                <TextBlock Text="Предупреждение о вреде для здоровья: каждый может"/>
+                                <TextBlock Text="испытывать более серьезные последствия для здоровья."/>
+                            </StackPanel>
+                        </Rectangle.ToolTip>
+                    </Rectangle>
+                    <TextBlock Text="300+ (Чрезвычайно опасно)" x:Name="TextMaroonRectangle"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <!-- Выезжающая панель с информацией -->
+        <Grid x:Name="SlidePanelGrid" 
+              Grid.Row="1"
+              HorizontalAlignment="Left" 
+              VerticalAlignment="Stretch"
+              Width="300"
+              Panel.ZIndex="1"
+              Background="Transparent">
+        </Grid>
+    </Grid>
+</Window>

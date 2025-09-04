@@ -1,0 +1,104 @@
+﻿<Page x:Class="WeatherApp.Pages.UserAlert"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WeatherApp.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="UserAlert"
+    Loaded="Page_Loaded">
+    <Page.Resources>
+        <local:PriorityToBrushConverter x:Key="PriorityToBrushConverter"/>
+        <local:PriorityToImageConverter x:Key="PriorityToImageConverter"/>
+        <local:NewsTypeToTitleConverter x:Key="NewsTypeToTitleConverter"/>
+    </Page.Resources>
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="#FF2B579A" Padding="15">
+            <!-- Заголовок -->
+        <TextBlock x:Name="MetoNews"
+                   Text="Метеоновости" 
+                   FontSize="26" 
+                   FontWeight="SemiBold" 
+                   Background="#FF2B579A"
+                   Foreground="#ffffff"
+                   VerticalAlignment="Center"
+                  HorizontalAlignment="Center"/>
+        </Border>
+        
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" x:Name="AlertScrollViewer">
+            <Grid>
+                <!-- Непрерывная вертикальная линия -->
+                <Rectangle Width="2"
+                           Fill="LightSkyBlue"
+                           HorizontalAlignment="Left"
+                           Margin="46,0,0,0"
+                           VerticalAlignment="Stretch"/>
+                <ItemsControl x:Name="NewsItemsControl">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                                    <!-- Точка (контурный круг) -->
+                                    <Ellipse Grid.Column="0"
+                                         Width="12" Height="12"
+                                         Stroke="LightSkyBlue"
+                                         StrokeThickness="2"
+                                         Fill="White"
+                                         VerticalAlignment="Top"
+                                         Margin="0,40,0,0"/>
+
+                                    <!-- Иконка Беларуси -->
+                                    <Image Grid.Column="1" 
+                                        Source="{Binding Priority, Converter={StaticResource PriorityToImageConverter}}"
+                                           Width="40" Height="40"
+                                           Margin="40,10,0,0"/>
+                                </StackPanel>
+                            
+                                <!-- Блок новости -->
+                            <Border Grid.Column="2"
+                                    Background="{Binding Priority, Converter={StaticResource PriorityToBrushConverter}}"
+                                    CornerRadius="10"
+                                    Padding="10"
+                                    Margin="30,0,0,0"
+                                    BorderBrush="#DDDDDD"
+                                    BorderThickness="1">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Type, Converter={StaticResource NewsTypeToTitleConverter}}"
+                                               FontWeight="Bold"
+                                               Foreground="Black"
+                                               FontSize="14"/>
+                                    <TextBlock Text="{Binding PublishDate}"
+                                               FontSize="12"
+                                               Foreground="#555"
+                                               Margin="0,2,0,8"/>
+                                    <TextBlock Text="{Binding Title}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               Foreground="#2C3E50"
+                                               TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding Content}"
+                                               FontSize="14"
+                                               TextWrapping="Wrap"
+                                               Foreground="#333"
+                                               Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

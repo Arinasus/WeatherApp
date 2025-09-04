@@ -1,0 +1,133 @@
+﻿<UserControl x:Class="WeatherApp.Pages.Measure"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WeatherApp.Pages"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="ScrollViewerEvents">
+        <StackPanel Margin="20">
+
+            <TextBlock x:Name="EventsTitle"
+                   Text="Ключевые мероприятия ECOLOGY EXPO – 2025"
+                   FontSize="20" FontWeight="Bold"
+                   Foreground="#01579B" Margin="0,10"/>
+
+            <!-- Мероприятие 1 -->
+            <Border Background="#E3F2FD" CornerRadius="10" Padding="15" x:Name="FirstEvent">
+                <StackPanel>
+                    <TextBlock Text="Открытая диалоговая площадка «Третий определяемый на национальном уровне вклад Республики Беларусь в Парижское соглашение (ОНУВ)»"
+                           FontSize="16" FontWeight="Bold" Foreground="#01579B"/>
+                    <TextBlock Text="Вопросы для обсуждения:" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                    <ItemsControl>
+                        <TextBlock Text="• Каковы основные цели и задачи Третьего ОНУВ Беларуси?"/>
+                        <TextBlock Text="• Чем он отличается от предыдущих ОНУВ?"/>
+                        <TextBlock Text="• Какие конкретные меры и политики планируется реализовать?"/>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+            <!-- Мероприятие 2 -->
+            <Border Background="White" CornerRadius="10" Padding="15" x:Name="SecondEvent">
+                <StackPanel>
+                    <TextBlock Text="Диалоговая площадка «О негативном воздействии односторонних санкций…»"
+                           FontSize="16" FontWeight="Bold" Foreground="#01579B"/>
+                    <TextBlock Text="Вопросы для обсуждения:" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                    <ItemsControl>
+                        <TextBlock Text="• Односторонние санкции как препятствие к «зелёным» инвестициям"/>
+                        <TextBlock Text="• Влияние на выполнение международных обязательств"/>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+            <Border Background="#E3F2FD" CornerRadius="10" Padding="15" x:Name="ThirdEvent">
+                <StackPanel>
+                    <TextBlock Text="Диалоговая площадка «О негативном воздействии односторонних принудительных мер (санкций) на реализацию государственной и международной политики в области охраны окружающей среды, рационального (устойчивого) использования природных ресурсов, смягчения последствий изменения климата и преодолении их последствий»."
+                FontSize="16" FontWeight="Bold" Foreground="#01579B" TextWrapping="Wrap"/>
+                    <TextBlock Text="Вопросы для обсуждения:" FontWeight="SemiBold" Margin="0,10,0,5"/>
+                    <ItemsControl>
+                        <TextBlock Text="• Односторонние санкции как препятствие к доступу к экологически чистым технологиям и «зеленым» инвестициям."/>
+                        <TextBlock Text="• Могут ли санкции приводить к ухудшению экологических стандартов и практик в странах, стремящихся к устойчивому развитию?"/>
+                        <TextBlock Text="• Как санкции влияют на возможности стран участвовать в международных экологических соглашениях и выполнять свои обязательства по ним?"/>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Background="White"
+                    CornerRadius="10"
+                    Padding="15"
+                    Margin="0,0,0,20"
+                    BorderBrush="#E3F2FD"
+                    BorderThickness="1">
+                <TextBlock TextWrapping="Wrap" x:Name="LinkBlock">
+                    <Run Text="В Республике Беларусь активно проводятся мероприятия, направленные на улучшение экологической обстановки. " />
+                    <Run Text="Среди ключевых инициатив — посадка деревьев, очистка водоемов и развитие экологического образования." FontWeight="Bold"/>
+                    <LineBreak/>
+                    <LineBreak/>
+                    <Run Text="Подробнее можно узнать на сайте: " />
+                    <Hyperlink NavigateUri="https://ecologyexpo.by/pustayastranitsa_refc/" RequestNavigate="Hyperlink_RequestNavigate">
+                        https://ecologyexpo.by/pustayastranitsa_refc/
+                    </Hyperlink>
+                </TextBlock>
+            </Border>
+
+            <Border Background="#FFF8E1"
+                    CornerRadius="10"
+                    Padding="15"
+                    Margin="0,0,0,20"
+                    BorderBrush="#FFE082"
+                    BorderThickness="1">
+                <TextBlock TextWrapping="Wrap" x:Name="HistoricalInfo">
+                    <Run Text="🗓 В 2023 году прошло масштабное экологическое мероприятие " />
+                    <Run Text="«Зелёный марш»" FontWeight="Bold"/>
+                    <Run Text=", в рамках которого более 15 000 человек по всей Беларуси приняли участие в посадке лесов и уборке территорий."/>
+                </TextBlock>
+            </Border>
+
+            <TextBlock x:Name="EventsForParticipant"
+                       Text="Мероприятия, в которых вы можете поучаствовать" 
+                       FontSize="22" 
+                       FontWeight="Bold"
+                       Margin="0,0,0,10"
+                       Foreground="#2B579A"/>
+
+            <ItemsControl ItemsSource="{Binding Events}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0 5"
+                                Padding="10"
+                                CornerRadius="10"
+                                Background="#F9F9F9"
+                                BorderBrush="#F9F9F9"
+                                BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Foreground="#1B1B1B"/>
+
+                                <TextBlock Text="{Binding Date, StringFormat='Дата: {0:dd.MM.yyyy}'}"
+                                           FontSize="12"
+                                           Foreground="Gray"
+                                           Margin="0,2,0,0"/>
+
+                                <TextBlock Text="{Binding Description}"
+                                           FontSize="14"
+                                           TextWrapping="Wrap"
+                                           Foreground="#333"
+                                           Margin="0,5,0,0"/>
+                                <Button Content="Принять участие"
+        Tag="{Binding}" 
+        Click="JoinButton_Click"
+        Background="#2B579A"
+        Foreground="White"
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

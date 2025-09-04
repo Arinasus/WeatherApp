@@ -1,0 +1,68 @@
+﻿<UserControl  x:Class="WeatherApp.AlertUserControl"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WeatherApp"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800">
+
+
+
+    <Border Margin="20" Background="#F9F9F9" Padding="20" CornerRadius="10" BorderBrush="#DDDDDD" BorderThickness="1">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок -->
+            <TextBlock Text="Новое оповещение" Grid.ColumnSpan="2"
+                       FontSize="22" FontWeight="Bold" Foreground="#333"
+                       Margin="0,0,0,20"/>
+
+            <!-- Тип -->
+            <TextBlock Text="Тип оповещения:" Grid.Row="1" VerticalAlignment="Center" FontSize="14" Foreground="#444"/>
+            <ComboBox x:Name="TypeComboBox" Grid.Row="1" Grid.Column="1" Margin="0,5"
+                      FontSize="14" Padding="5" Background="White" BorderBrush="#CCC">
+                <ComboBoxItem Content="Погодное предупреждение"/>
+                <ComboBoxItem Content="Технические работы"/>
+                <ComboBoxItem Content="Важная информация"/>
+                <ComboBoxItem Content="Рекомендация"/>
+                <ComboBoxItem Content="Новости"/>
+            </ComboBox>
+
+            <!-- Приоритет -->
+            <TextBlock Text="Уровень важности:" Grid.Row="2" VerticalAlignment="Center" FontSize="14" Foreground="#444"/>
+            <StackPanel x:Name="PriorityPanel" Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,5">
+                <RadioButton Content="Низкий" Margin="0,0,20,0" FontSize="14"/>
+                <RadioButton Content="Средний" Margin="0,0,20,0" FontSize="14"/>
+                <RadioButton Content="Высокий" FontSize="14"/>
+            </StackPanel>
+
+            <!-- Текст -->
+            <TextBlock Text="Текст оповещения:" Grid.Row="3" VerticalAlignment="Top" FontSize="14" Foreground="#444" Margin="0,10,0,0"/>
+            <TextBox x:Name="AlertTextBox" Grid.Row="3" Grid.Column="1" Margin="0,10" Height="100"
+                     TextWrapping="Wrap" AcceptsReturn="True" FontSize="14"
+                     Background="White" BorderBrush="#CCC" Padding="6" VerticalScrollBarVisibility="Auto"/>
+
+            <!-- Кнопки -->
+            <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button x:Name="CancelButton" Content="Отмена" Margin="0,0,10,0" Width="100"
+                        Background="Transparent" BorderBrush="#888" Foreground="#444"
+                        Padding="6,3" Cursor="Hand"/>
+                <Button x:Name="PublishButton" Content="Опубликовать" Width="120" Padding="6,3"
+                        Background="#FF2B579A" Foreground="White" FontWeight="Bold"
+                        Cursor="Hand" Click="PublishButton_Click"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

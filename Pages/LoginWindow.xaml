@@ -1,0 +1,47 @@
+﻿<metro:MetroWindow x:Class="WeatherApp.Pages.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WeatherApp.Pages"
+        xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        Title="Вход"  Height="350" Width="400"
+        WindowStartupLocation="CenterScreen">
+    <metro:MetroWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </metro:MetroWindow.Resources>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <!-- Основной контент -->
+            <RowDefinition Height="Auto" />
+            <!-- Ссылка регистрации -->
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Логин"/>
+            <TextBox x:Name="EmailBox" 
+                     metro:TextBoxHelper.Watermark="Введите логин" Margin="0,5"/>
+            <TextBlock x:Name="EmailError" Foreground="Red" Margin="0 0 0 5" TextWrapping="Wrap"/>
+            <TextBlock Text="Пароль"/>
+            <PasswordBox x:Name="PasswordBox" 
+                         metro:TextBoxHelper.Watermark="Введите пароль" Margin="0,5"/>
+            <TextBlock x:Name="PasswordError" Foreground="Red" Margin="0 0 0 5" TextWrapping="Wrap"/>
+            <Button Content="Войти" x:Name="LoginButton" Click="Login_Click" Margin="0,10,0,0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Margin="10,20,10,0" HorizontalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center" TextAlignment="Center">
+        <Run Text="Еще нет аккаунта? " />
+        <Hyperlink Click="RegisterHyperlink_Click">
+            Зарегистрируйтесь
+        </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</metro:MetroWindow>
